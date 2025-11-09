@@ -1,82 +1,45 @@
-class Karyawan {
-  constructor(id, nama) {
-    this.id = id;
-    this.nama = nama;
-  }
-}
-
-
-class CutiTahunan {
-  constructor() {
-    this.jenis = "Cuti Tahunan";
-    this.maxKuota = 12;
+class Perusahaan {
+  constructor(kuota) {
+    this.kuota = kuota;
+    this.maksTahunan = 12;
+    this.maksSakit = 2;
+    this.maksLahir = 90;
   }
 
-  ajukanCuti(karyawan, jumlahHari) {
-    console.log(`\n=== Pengajuan ${this.jenis} ===`);
-    console.log(`Nama Karyawan : ${karyawan.nama}`);
-    console.log(`Jumlah Hari   : ${jumlahHari}`);
-
-    if (jumlahHari > this.maxKuota) {
-      console.log("Kuota anda tidak cukup untuk mengajukan cuti ini!");
+  checkKuota(maks, jenis) {
+    if (this.kuota <= maks) {
+      console.log(
+        `selamat anda berhasil mengambil cuti ${jenis} selama ${this.kuota} hari`
+      );
     } else {
-      console.log("Pengajuan cuti berhasil diterima!");
-      console.log(`Sisa kuota cuti: ${this.maxKuota - jumlahHari} hari`);
+      console.log(`Kuota tidak cukup untuk cuti ${jenis} (maks ${maks} hari)`);
     }
   }
 }
 
-
-class CutiSakit {
-  constructor() {
-    this.jenis = "Cuti Sakit";
-    this.maxKuota = 2;
-  }
-
-  ajukanCuti(karyawan, jumlahHari) {
-    console.log(`\n=== Pengajuan ${this.jenis} ===`);
-    console.log(`Nama Karyawan : ${karyawan.nama}`);
-    console.log(`Jumlah Hari   : ${jumlahHari}`);
-
-    if (jumlahHari > this.maxKuota) {
-      console.log("Kuota anda tidak cukup untuk mengajukan cuti ini!");
-    } else {
-      console.log("Pengajuan cuti berhasil diterima!");
-      console.log(`Sisa kuota cuti: ${this.maxKuota - jumlahHari} hari`);
-    }
+class CutiTahunan extends Perusahaan {
+  limitKuota() {
+    super.checkKuota(this.maksTahunan, "tahunan");
   }
 }
 
-class CutiMelahirkan {
-  constructor() {
-    this.jenis = "Cuti Melahirkan";
-    this.maxKuota = 90;
-  }
-
-  ajukanCuti(karyawan, jumlahHari) {
-    console.log(`\n=== Pengajuan ${this.jenis} ===`);
-    console.log(`Nama Karyawan : ${karyawan.nama}`);
-    console.log(`Jumlah Hari   : ${jumlahHari}`);
-
-    if (jumlahHari > this.maxKuota) {
-      console.log("Kuota anda tidak cukup untuk mengajukan cuti ini!");
-    } else {
-      console.log("Pengajuan cuti berhasil diterima!");
-      console.log(`Sisa kuota cuti: ${this.maxKuota - jumlahHari} hari`);
-    }
+class CutiSakit extends Perusahaan {
+  limitKuota() {
+    super.checkKuota(this.maksSakit, "sakit");
   }
 }
 
-// Membuat objek karyawan
-const karyawan1 = new Karyawan(1, "Wisnu");
-const karyawan2 = new Karyawan(2, "Sari");
+class CutiMelahirkan extends Perusahaan {
+  limitKuota() {
+    super.checkKuota(this.maksLahir, "melahirkan");
+  }
+}
 
-// Membuat objek cuti
-const cutiTahunan = new CutiTahunan();
-const cutiSakit = new CutiSakit();
-const cutiMelahirkan = new CutiMelahirkan();
+const cutiTahunan = new CutiTahunan(12);
+cutiTahunan.limitKuota();
 
-// Mengajukan cuti
-cutiTahunan.ajukanCuti(karyawan1, 5);
-cutiSakit.ajukanCuti(karyawan1, 3);
-cutiMelahirkan.ajukanCuti(karyawan2, 80);
+const cutiSakit = new CutiSakit(2);
+cutiSakit.limitKuota();
+
+const cutiMelahirkan = new CutiMelahirkan(90);
+cutiMelahirkan.limitKuota();

@@ -1,61 +1,46 @@
-class Karyawan {
-  constructor(id, nama) {
-    this.id = id;
-    this.nama = nama;
-  }
-}
-
-class Cuti {
-  constructor(jenis, maxKuota) {
-    this.jenis = jenis;
-    this.maxKuota = maxKuota;
+class Perusahaan {
+  constructor(kuota) {
+    this.kuota = kuota;
+    this.maksTahunan = 12;
+    this.maksSakit = 2;
+    this.maksLahir = 90;
   }
 
-  ajukanCuti(karyawan, jumlahHari) {
-    console.log(`\n=== Pengajuan ${this.jenis} ===`);
-    console.log(`Nama Karyawan : ${karyawan.nama}`);
-    console.log(`Jumlah Hari   : ${jumlahHari}`);
-
-    if (jumlahHari > this.maxKuota) {
-      console.log("Kuota anda tidak cukup untuk mengajukan cuti ini!");
+  checkKuota(maks, jenis) {
+    if (this.kuota <= maks) {
+      console.log(
+        `selamat anda berhasil mengambil cuti ${jenis} selama ${this.kuota} hari`
+      );
     } else {
-      console.log("Pengajuan cuti berhasil diterima!");
-      console.log(`Sisa kuota cuti: ${this.maxKuota - jumlahHari} hari`);
+      console.log(`Kuota tidak cukup untuk cuti ${jenis} (maks ${maks} hari)`);
     }
   }
 }
 
-
-class CutiTahunan extends Cuti {
-  constructor() {
-    super("Cuti Tahunan", 12); // panggil constructor induk
+class CutiTahunan extends Perusahaan {
+  limitKuota() {
+    super.checkKuota(this.maksTahunan, "tahunan");
   }
 }
 
-class CutiSakit extends Cuti {
-  constructor() {
-    super("Cuti Sakit", 2);
+class CutiSakit extends Perusahaan {
+  limitKuota() {
+    super.checkKuota(this.maksSakit, "sakit");
   }
 }
 
-class CutiMelahirkan extends Cuti {
-  constructor() {
-    super("Cuti Melahirkan", 90);
+class CutiMelahirkan extends Perusahaan {
+  limitKuota() {
+    super.checkKuota(this.maksLahir, "melahirkan");
   }
 }
 
-// === Membuat Objek ===
-const karyawan1 = new Karyawan(1, "Wisnu");
-const karyawan2 = new Karyawan(2, "Sari");
+const cutiTahunan = new CutiTahunan(12);
+cutiTahunan.limitKuota();
 
-// === Membuat Objek Cuti ===
-const cutiTahunan = new CutiTahunan();
-const cutiSakit = new CutiSakit();
-const cutiMelahirkan = new CutiMelahirkan();
+const cutiSakit = new CutiSakit(2);
+cutiSakit.limitKuota();
 
-// === Pengajuan Cuti ===
-cutiTahunan.ajukanCuti(karyawan1, 5);
-cutiSakit.ajukanCuti(karyawan1, 3);
-cutiMelahirkan.ajukanCuti(karyawan2, 80);
-
+const cutiMelahirkan = new CutiMelahirkan(90);
+cutiMelahirkan.limitKuota();
 
